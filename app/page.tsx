@@ -28,7 +28,10 @@ const RootPage = () => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`${serverUrl}/posts`);
+      const res = await fetch(`${serverUrl}/posts`,{
+        method: "GET",
+        credentials: "include",
+      });
       const data = await res.json();
       setPosts(data.posts);
       setFilteredPosts(data.posts);
