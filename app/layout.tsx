@@ -1,17 +1,21 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
 import { PropsWithChildren } from "react";
-import { ThemeProvider } from "@/components/theme-provider";
-import NavigationWrapper from "@/components/NavigationWrapper";
+import "./globals.css";
+import { Inter } from "next/font/google";
+import { Metadata } from "next";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { TanstackQueryClientProvider } from "@/components/providers/tanstack-query-client-provider";
+import { Toaster } from "@/components/ui/sonner";
+import NavigationBar from "@/components/ui/NavigationBar";
 
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-export const metadata = {
-  title: "Hacker News",
-  description: "Built by Arif",
+export const metadata: Metadata = {
+  title: "Insight360",
+  description:
+    "Breaking barriers in news—tech, trends, and world affairs delivered with depth and clarity.",
 };
 
 const RootLayout = ({ children }: PropsWithChildren) => {
@@ -24,10 +28,15 @@ const RootLayout = ({ children }: PropsWithChildren) => {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="min-h-screen flex flex-col bg-background text-foreground">
-            <NavigationWrapper />
-            <main className="flex-1 p-4 pt-[4.5rem]">{children}</main>
-          </div>
+          <TanstackQueryClientProvider>
+            <main className="min-h-screen">
+              <NavigationBar />
+              <div className="mx-auto mt-4 px-4 sm:px-6 lg:px-8 max-w-7xl">
+                {children}
+              </div>
+            </main>
+            <Toaster />
+          </TanstackQueryClientProvider>
         </ThemeProvider>
       </body>
     </html>
