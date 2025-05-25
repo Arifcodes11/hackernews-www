@@ -21,8 +21,11 @@ import { useState } from "react";
 
 const NavigationBar = () => {
   const router = useRouter();
-  const { data } = betterAuthClient.useSession();
-  const user = data?.user;
+  // const { data } = betterAuthClient.useSession();
+  // const user = data?.user;
+  const session = betterAuthClient.useSession();
+const user = session?.data?.user;
+
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   // ✅ Hide navbar entirely if user is not logged in
