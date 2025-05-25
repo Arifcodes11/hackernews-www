@@ -19,10 +19,10 @@ export const metadata: Metadata = {
 };
 
 const RootLayout = ({ children }: PropsWithChildren) => {
-  const { data, isLoading } = betterAuthClient.useSession();
+  const { data, isPending } = betterAuthClient.useSession();
 
   // Wait until auth is ready to prevent layout flash
-  if (isLoading) return null;
+  if (isPending) return null;
 
   const isLoggedIn = Boolean(data?.user);
 
