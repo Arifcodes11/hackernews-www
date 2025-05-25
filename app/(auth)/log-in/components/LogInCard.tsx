@@ -45,7 +45,7 @@ export const LogInCard = () => {
       }
 
 
-      router.replace(`/feeds`);
+      router.replace("/feeds");
     },
   });
 
