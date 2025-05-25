@@ -11,14 +11,14 @@ const RootPage = () => {
         <div className="flex flex-col items-center gap-2 px-4 sm:px-6 md:px-8">
 
           <Image
-            src="/robo-wave-removebg-preview.png"
+            src="/abstract-digital-data-stream-green-binary-code-cascade.png"
             alt="Robot waving"
             width={384} // for example, 48 * 8 (w-48 in tailwind is 12rem = 192px, so adjust as needed)
             height={192} // adjust height accordingly to keep aspect ratio
             className="object-contain"
           />
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-balance max-w-[90%] sm:max-w-[80%] md:max-w-prose">
-            InSight360
+            Intelliview
           </h1>
           <p className="text-base sm:text-lg max-w-[90%] sm:max-w-[80%] md:max-w-prose text-muted-foreground">
             Your Gateway to the World&apos;s News, Trends, and Insights
