@@ -1,5 +1,4 @@
-// RootLayout.tsx
-"use client";
+
 
 import { PropsWithChildren } from "react";
 import "./globals.css";
@@ -21,9 +20,7 @@ export const metadata: Metadata = {
 const RootLayout = ({ children }: PropsWithChildren) => {
   const { data, isPending } = betterAuthClient.useSession();
 
-  // Wait until auth is ready to prevent layout flash
   if (isPending) return null;
-
   const isLoggedIn = Boolean(data?.user);
 
   return (
@@ -32,7 +29,6 @@ const RootLayout = ({ children }: PropsWithChildren) => {
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <TanstackQueryClientProvider>
             <main className="min-h-screen">
-              {/* ✅ Show Navbar only when logged in */}
               {isLoggedIn && <NavigationBar />}
               <div className="mx-auto mt-4 px-4 sm:px-6 lg:px-8 max-w-7xl">
                 {children}
