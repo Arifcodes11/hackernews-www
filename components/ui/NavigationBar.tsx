@@ -38,7 +38,7 @@ const NavigationBar = () => {
               href="/feeds"
               className="text-2xl font-extrabold text-[#3B82F6] hover:text-blue-700"
             >
-              I<span className="hidden sm:inline">nsight360</span>
+              I<span className="hidden sm:inline">ntelliview</span>
             </Link>
           </div>
 
