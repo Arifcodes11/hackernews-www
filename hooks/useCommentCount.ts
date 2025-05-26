@@ -1,10 +1,11 @@
 // useCommentCount.ts
 import { serverUrl } from "@/lib/environment";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useState } from "react";
 
 export const useCommentCount = (postId: string) => {
   const queryClient = useQueryClient();
-  // Removed unused optimisticCount state
+  const [optimisticCount, setOptimisticCount] = useState(0);
 
   const query = useQuery({
     queryKey: ["comment-count", postId],
@@ -30,7 +31,7 @@ export const useCommentCount = (postId: string) => {
   };
 
   return {
-    count: query.data || 0,
+    count: query.data || 0 + optimisticCount,
     isLoading: query.isLoading,
     error: query.error,
     updateCount

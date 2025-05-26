@@ -13,7 +13,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Intelliview",
+  title: "Insight360",
   description:
     "Breaking barriers in news—tech, trends, and world affairs delivered with depth and clarity.",
 };
