@@ -1,12 +1,11 @@
 import { LogInCard } from "./components/LogInCard";
 
-
-
-
 const LogInPage = () => {
   return (
-    <div className="h-svh  flex items-center justify-center mx-auto">
-  <LogInCard />
+    <div className="min-h-screen w-full flex items-center justify-center bg-background">
+      <div className="w-full max-w-md px-4">
+        <LogInCard />
+      </div>
     </div>
   );
 };

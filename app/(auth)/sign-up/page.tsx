@@ -1,15 +1,15 @@
 import { SignUpCard } from "./components/sign-up-card/SignUpCard";
 
-
-
-
 const SignUpPage = () => {
   return (
-    <div className="h-svh flex justify-center items-center  mx-auto">
-<SignUpCard/>
+    <div className="min-h-screen w-full flex items-center justify-center bg-background">
+      <div className="w-full max-w-md px-4">
+        <SignUpCard />
+      </div>
     </div>
   );
 };
+
 export default SignUpPage;
 // "use client";
 
