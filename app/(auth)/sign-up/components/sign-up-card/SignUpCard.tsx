@@ -48,7 +48,7 @@ export const SignUpCard = () => {
     onSubmit: async (value) => {
       const { name, email, password } = value.value;
       try {
-        const { error, data, response } = await betterAuthClient.signUp.email({
+        const { error, response } = await betterAuthClient.signUp.email({
           name,
           email,
           password,
@@ -62,12 +62,12 @@ export const SignUpCard = () => {
         // If /feeds route exists, redirect
         try {
           await router.push('/feeds');
-        } catch (e) {
+        } catch {
           const msg = "'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page.";
           toast.error(msg);
           setSignUpError(new Error(msg));
         }
-      } catch (e) {
+      } catch {
         toast.error('An unexpected error occurred during signup.');
         setSignUpError(new Error('An unexpected error occurred during signup.'));
       }
