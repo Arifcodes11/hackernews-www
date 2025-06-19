@@ -37,16 +37,22 @@ export const SignUpCard = () => {
     },
     onSubmit: async (value) => {
       const { name, email, password } = value.value;
-      const { error } = await betterAuthClient.signUp.email({
+      const { error, data } = await betterAuthClient.signUp.email({
         name,
         email,
         password,
       });
+      console.log('Signup response:', { error, data });
       if (error) {
         setSignUpError(new Error("Unable to sign up currently"));
         return;
       }
-      router.replace("/feeds");
+      // Check if /feeds route exists by trying to navigate
+      try {
+        router.push('/feeds');
+      } catch (e) {
+        setSignUpError(new Error("'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page."));
+      }
     },
   });
   return (
@@ -87,6 +93,7 @@ export const SignUpCard = () => {
                     value={field.state.value}
                     type="text"
                     placeholder="Name"
+                    autoComplete="name"
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
@@ -121,6 +128,7 @@ export const SignUpCard = () => {
                     value={field.state.value}
                     type="email"
                     placeholder="Email"
+                    autoComplete="email"
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
@@ -155,6 +163,7 @@ export const SignUpCard = () => {
                     value={field.state.value}
                     type="password"
                     placeholder="Password"
+                    autoComplete="new-password"
                     onBlur={field.handleBlur}
                     onChange={(e) => field.handleChange(e.target.value)}
                   />
@@ -194,7 +203,7 @@ export const SignUpCard = () => {
                     }}
                   />
                   <label
-                    htmlFor="terms"
+                    htmlFor={field.name}
                     className={cn(
                       "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
                       field.state.meta.errors.length > 0 && "text-destructive"

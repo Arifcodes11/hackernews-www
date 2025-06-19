@@ -34,18 +34,21 @@ export const LogInCard = () => {
     },
     onSubmit: async (value) => {
       const { email, password } = value.value;
-      const { error } = await betterAuthClient.signIn.email({
+      const { error, data } = await betterAuthClient.signIn.email({
         email,
         password,
       });
-
+      console.log('Login response:', { error, data });
       if (error) {
         setLogInError(new Error("Unable to log in currently!"));
         return;
       }
-
-
-      router.replace(`/feeds`);
+      // Check if /feeds route exists by trying to navigate
+      try {
+        router.push('/feeds');
+      } catch (e) {
+        setLogInError(new Error("'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page."));
+      }
     },
   });
 
