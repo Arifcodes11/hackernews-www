@@ -44,11 +44,11 @@ export const LogInCard = () => {
     onSubmit: async (value) => {
       const { email, password } = value.value;
       try {
-        const { error, response } = await betterAuthClient.signIn.email({
+        const { error } = await betterAuthClient.signIn.email({
           email,
           password,
         });
-        if (error || (response && !response.ok)) {
+        if (error) {
           const msg = error?.message || 'Unable to log in currently!';
           toast.error(msg);
           setLogInError(new Error(msg));

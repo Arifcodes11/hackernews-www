@@ -48,12 +48,12 @@ export const SignUpCard = () => {
     onSubmit: async (value) => {
       const { name, email, password } = value.value;
       try {
-        const { error, response } = await betterAuthClient.signUp.email({
+        const { error } = await betterAuthClient.signUp.email({
           name,
           email,
           password,
         });
-        if (error || (response && !response.ok)) {
+        if (error) {
           const msg = error?.message || 'Unable to sign up currently';
           toast.error(msg);
           setSignUpError(new Error(msg));
