@@ -13,9 +13,10 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
 import { betterAuthClient } from "@/lib/integrations/better-auth";
+import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
 
@@ -27,6 +28,15 @@ import { RoundSpinner } from "@/components/ui/spinner";
 
 export const SignUpCard = () => {
   const router = useRouter();
+  const { data: session } = betterAuthClient.useSession();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (session && session.user) {
+      router.push('/feeds');
+    }
+  }, [session, router]);
+
   const [signUpError, setSignUpError] = useState<Error | null>(null);
   const { Field, handleSubmit, Subscribe } = useForm({
     defaultValues: {
@@ -37,21 +47,29 @@ export const SignUpCard = () => {
     },
     onSubmit: async (value) => {
       const { name, email, password } = value.value;
-      const { error, data } = await betterAuthClient.signUp.email({
-        name,
-        email,
-        password,
-      });
-      console.log('Signup response:', { error, data });
-      if (error) {
-        setSignUpError(new Error("Unable to sign up currently"));
-        return;
-      }
-      // Check if /feeds route exists by trying to navigate
       try {
-        router.push('/feeds');
+        const { error, data, response } = await betterAuthClient.signUp.email({
+          name,
+          email,
+          password,
+        });
+        if (error || (response && !response.ok)) {
+          const msg = error?.message || 'Unable to sign up currently';
+          toast.error(msg);
+          setSignUpError(new Error(msg));
+          return;
+        }
+        // If /feeds route exists, redirect
+        try {
+          await router.push('/feeds');
+        } catch (e) {
+          const msg = "'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page.";
+          toast.error(msg);
+          setSignUpError(new Error(msg));
+        }
       } catch (e) {
-        setSignUpError(new Error("'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page."));
+        toast.error('An unexpected error occurred during signup.');
+        setSignUpError(new Error('An unexpected error occurred during signup.'));
       }
     },
   });

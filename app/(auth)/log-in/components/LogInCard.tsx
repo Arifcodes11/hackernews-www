@@ -14,9 +14,10 @@ import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
 import { useForm } from "@tanstack/react-form";
 import { betterAuthClient } from "@/lib/integrations/better-auth";
+import { toast } from "sonner";
 
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { z } from "zod";
 
 import { Caption } from "@/components/ui/Caption";
@@ -25,6 +26,14 @@ import { emailSchema } from "@/lib/extras/schemas/email";
 
 export const LogInCard = () => {
   const router = useRouter();
+  const { data: session } = betterAuthClient.useSession();
+
+  // Redirect if already logged in
+  useEffect(() => {
+    if (session && session.user) {
+      router.push('/feeds');
+    }
+  }, [session, router]);
 
   const [logInError, setLogInError] = useState<Error | null>(null);
   const { Field, handleSubmit, Subscribe } = useForm({
@@ -34,20 +43,28 @@ export const LogInCard = () => {
     },
     onSubmit: async (value) => {
       const { email, password } = value.value;
-      const { error, data } = await betterAuthClient.signIn.email({
-        email,
-        password,
-      });
-      console.log('Login response:', { error, data });
-      if (error) {
-        setLogInError(new Error("Unable to log in currently!"));
-        return;
-      }
-      // Check if /feeds route exists by trying to navigate
       try {
-        router.push('/feeds');
+        const { error, data, response } = await betterAuthClient.signIn.email({
+          email,
+          password,
+        });
+        if (error || (response && !response.ok)) {
+          const msg = error?.message || 'Unable to log in currently!';
+          toast.error(msg);
+          setLogInError(new Error(msg));
+          return;
+        }
+        // If /feeds route exists, redirect
+        try {
+          await router.push('/feeds');
+        } catch (e) {
+          const msg = "'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page.";
+          toast.error(msg);
+          setLogInError(new Error(msg));
+        }
       } catch (e) {
-        setLogInError(new Error("'/feeds' route does not exist. Please create 'app/(main)/feeds/page.tsx' or the appropriate file for your feeds page."));
+        toast.error('An unexpected error occurred during login.');
+        setLogInError(new Error('An unexpected error occurred during login.'));
       }
     },
   });
