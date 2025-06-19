@@ -1,13 +1,9 @@
-import { nextCookies } from "better-auth/next-js";
 import { createAuthClient } from "better-auth/react";
-import { usernameClient } from "better-auth/client/plugins"; 
-import { serverUrl } from "@/environment";
+import { nextCookies } from "better-auth/next-js";
+import { serverUrl } from "@/lib/environment";
 
 export const betterAuthClient = createAuthClient({
   baseURL: serverUrl,
-  plugins: [usernameClient(),nextCookies()],
-  fetchOptions: {
-    credentials: "include", 
-  },
+  basePath: "/authentication",
+  plugins: [nextCookies()],
 });
-

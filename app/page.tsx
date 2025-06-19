@@ -1,80 +1,111 @@
-
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { betterAuthClient } from "@/lib/integrations/better-auth";
-import { serverUrl } from "@/environment";
-import { CreatePost } from "./_pages/CreatePost";
-import PostList from "./_pages/PostsLists";
-
-interface Post {
-  id: string;
-  title: string;
-  content: string;
-  userId: string;
-  createdAt: string;
-  updatedAt: string;
-}
+import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
 
 const RootPage = () => {
-  const { data: session } = betterAuthClient.useSession();
-
-  // Explicitly define the state type as Post[]
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  const fetchPosts = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`${serverUrl}/posts`);
-      const data = await res.json();
-
-    
-      if (Array.isArray(data)) {
-        setPosts(data); 
-      } else if (Array.isArray(data.posts)) {
-        setPosts(data.posts); 
-      } else {
-        setPosts([]);
-      }
-    } catch (error) {
-      console.error("Failed to fetch posts:", error);
-      setPosts([]); 
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    fetchPosts();
-  }, []);
-
   return (
-    <div className="relative flex max-w-7xl mx-auto p-4 gap-6">
-      <div className="flex-1">
-      
-        <PostList
-          posts={posts}
-          loading={loading}
-          currentUserId={session?.user?.id || ""}
-        />
+    <div className="min-h-svh container mx-auto px-4">
+      <div className="min-h-svh flex flex-col items-center justify-center gap-6 text-center">
+        <div className="flex flex-col items-center gap-2 px-4 sm:px-6 md:px-8">
+
+          <Image
+            src="/robo-wave-removebg-preview.png"
+            alt="Robot waving"
+            width={384} // for example, 48 * 8 (w-48 in tailwind is 12rem = 192px, so adjust as needed)
+            height={192} // adjust height accordingly to keep aspect ratio
+            className="object-contain"
+          />
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-balance max-w-[90%] sm:max-w-[80%] md:max-w-prose">
+            InSight360
+          </h1>
+          <p className="text-base sm:text-lg max-w-[90%] sm:max-w-[80%] md:max-w-prose text-muted-foreground">
+            Your Gateway to the World&apos;s News, Trends, and Insights
+          </p>
+        </div>
+
+        <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto px-4">
+          <Button asChild className="w-full sm:w-auto">
+            <Link href="/sign-up">Sign Up</Link>
+          </Button>
+          <Button variant="secondary" asChild className="w-full sm:w-auto">
+            <Link href="/log-in">Log In</Link>
+          </Button>
+        </div>
       </div>
-
-      {session && (
-        <>
-         
-          <div className="fixed bottom-6 right-6 z-50 md:hidden">
-            <CreatePost floating onPostCreated={fetchPosts} />
-          </div>
-
-         
-          <div className="hidden md:block sticky top-20 h-fit">
-            <CreatePost onPostCreated={fetchPosts} />
-          </div>
-        </>
-      )}
     </div>
   );
 };
 
 export default RootPage;
+// "use client";
+
+// import { useEffect } from "react";
+// import { useRouter } from "next/navigation";
+// import { Button } from "@/components/ui/button";
+// import Image from "next/image";
+// import Link from "next/link";
+
+// const RootPage = () => {
+//   const router = useRouter();
+
+//   useEffect(() => {
+//     const checkSession = async () => {
+//       try {
+//         const res = await fetch(
+//           `${process.env.NEXT_PUBLIC_API_URL}/users/me`,
+//           {
+//             credentials: "include", // VERY important!
+//           }
+//         );
+
+//         if (res.ok) {
+//           const data = await res.json();
+//           if (data?.id) {
+//             // ✅ User is logged in, redirect to feed
+//             router.push("/feeds");
+//           }
+//         }
+//       } catch (error) {
+//         console.error("Session check failed:", error);
+//         // Do nothing — just show the signup/login page
+//       }
+//     };
+
+//     checkSession();
+//   }, [router]);
+
+//   return (
+//     <div className="min-h-svh container mx-auto px-4">
+//       <div className="min-h-svh flex flex-col items-center justify-center gap-6 text-center">
+//         <div className="flex flex-col items-center gap-2 px-4 sm:px-6 md:px-8">
+//           <Image
+//             src="/robo-wave-removebg-preview.png"
+//             alt="Robot waving"
+//             width={384}
+//             height={192}
+//             className="object-contain"
+//           />
+//           <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-balance max-w-[90%] sm:max-w-[80%] md:max-w-prose">
+//             InSight360
+//           </h1>
+//           <p className="text-base sm:text-lg max-w-[90%] sm:max-w-[80%] md:max-w-prose text-muted-foreground">
+//             Your Gateway to the World&apos;s News, Trends, and Insights
+//           </p>
+//         </div>
+
+//         <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto px-4">
+//           <Button asChild className="w-full sm:w-auto">
+//             <Link href="/sign-up">Sign Up</Link>
+//           </Button>
+//           <Button variant="secondary" asChild className="w-full sm:w-auto">
+//             <Link href="/log-in">Log In</Link>
+//           </Button>
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+// export default RootPage;
